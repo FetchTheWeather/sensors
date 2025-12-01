@@ -77,10 +77,7 @@ def connect(config):
     global MODE
     if sta_if.active() == False:
         sta_if.active(True)
-    try:
-        sta_if.connect(config["network"]["ssid"], config["network"]["psk"]) # Connects to network
-    except:
-        print("ERROR: An error occured when trying to connect to network")
+    sta_if.connect(config["network"]["ssid"], config["network"]["psk"]) # Connects to network
     i = 0
     connected = False
     while i < 10: # Checks for a connection during a 10 second period
