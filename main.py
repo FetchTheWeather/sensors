@@ -136,11 +136,14 @@ if __name__ == "__main__":
     # Sensor initialization goes here
     
     # DHT11 sensor initialization
-    try:
-        DHT11_object = dht.DHT11(machine.Pin(4))
-        print("INFO: Initialized DHT11 module")
-    except:
-        print("ERROR: Failed to initialize DHT11 module")
+    if DHT11_ENABLED == True:
+        try:
+            DHT11_object = dht.DHT11(machine.Pin(4))
+            print("INFO: Initialized DHT11 module")
+        except:
+            print("ERROR: Failed to initialize DHT11 module")
+    else:
+        print("INFO: DHT11 module is disabled")
     
     sensors = Sensors(dht11=DHT11_object, mq135=MQ135_object, bmp280=BMP280_object) # Add sensor objects here
     data = Data(sensors)
