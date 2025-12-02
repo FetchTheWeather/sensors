@@ -11,6 +11,9 @@
 # Import core libraries
 import network, time, json, urequests, random, machine
 
+# Import BMP280 library
+from bmp280 import *
+
 # Global variables
 MODE = "OFFLINE"
 URL = "https://ftw.pietr.dev/"
@@ -36,7 +39,7 @@ class Data:
         self.temp = None
         self.humidity = None
         self.quality = None
-        self.pressure = None
+        self.pressure = self.sensors.bmp280()
         
     def get_dict(self):
         return {"time": self.time,"temp": self.temp, "humidity": self.humidity, "quality": self.quality, "pressure": self.pressure}
@@ -46,6 +49,9 @@ class Sensors:
         self.DHT11 = DHT11
         self.MQ135 = MQ135
         self.BMP280 = BMP280
+    
+    def bmp280(self):
+        return self.BMP280.pressure
     
 class Config:
     def __init__(self):
@@ -117,6 +123,18 @@ if __name__ == "__main__":
     
     # Sensor initialization goes here
     
+    # BMP280 sensor initialization
+    bus = machine.I2C(sda=machine.Pin(8), scl=machine.Pin(9))
+    addr = 0x76
+    if addr in bus.scan():
+        print("INFO: bmp280 module found at I2C address " + hex(addr))
+        bmp = BMP280(bus)
+
+        bmp.use_case(BMP280_CASE_WEATHER)
+        bmp.oversample(BMP280_OS_HIGH)
+        bmp.normal_measure()
+    else:
+        print("ERROR: bmp280 module not found!")
     
     sensors = Sensors() # Add sensor objects here
     data = Data(sensors)
