@@ -135,21 +135,24 @@ if __name__ == "__main__":
     # Sensor initialization goes here
     
     # BMP280 sensor initialization
-    bus = machine.I2C(sda=machine.Pin(8), scl=machine.Pin(9))
-    addr = 0x76
-    if addr in bus.scan():
-        print("INFO: bmp280 module found at I2C address " + hex(addr))
-        try:
-            BMP280_object = BMP280(bus)
+    if BMP280_ENABLED == True:
+        bus = machine.I2C(sda=machine.Pin(8), scl=machine.Pin(9))
+        addr = 0x76
+        if addr in bus.scan():
+            print("INFO: bmp280 module found at I2C address " + hex(addr))
+            try:
+                BMP280_object = BMP280(bus)
 
-            BMP280_object.use_case(BMP280_CASE_WEATHER)
-            BMP280_object.oversample(BMP280_OS_HIGH)
-            BMP280_object.normal_measure()
-            print("INFO: Initialized BMP280 module")
-        except:
-            print("ERROR: Failed to initialize BMP280 module")
+                BMP280_object.use_case(BMP280_CASE_WEATHER)
+                BMP280_object.oversample(BMP280_OS_HIGH)
+                BMP280_object.normal_measure()
+                print("INFO: Initialized BMP280 module")
+            except:
+                print("ERROR: Failed to initialize BMP280 module")
+        else:
+            print("ERROR: bmp280 module not found!")
     else:
-        print("ERROR: bmp280 module not found!")
+        print("INFO: BMP280 module is disabled")
     
     sensors = Sensors(dht11=DHT11_object, mq135=MQ135_object, bmp280=BMP280_object) # Add sensor objects here
     data = Data(sensors)
