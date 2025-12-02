@@ -21,6 +21,11 @@ Fetch The Weather: Weather stations
 Copyright (c) 2025 Fetch The Weather
 """
 
+# SENSORS
+DHT11_ENABLED = True
+MQ135_ENABLED = True
+BMP280_ENABLED = True
+
 # Define classes
 class Data:
     def __init__(self, sensors):
@@ -42,10 +47,10 @@ class Data:
         return {"time": self.time,"temp": self.temp, "humidity": self.humidity, "quality": self.quality, "pressure": self.pressure}
 
 class Sensors:
-    def __init__(self, DHT11, MQ135, BMP280):
-        self.DHT11 = DHT11
-        self.MQ135 = MQ135
-        self.BMP280 = BMP280
+    def __init__(self, dht11, mq135, bmp280):
+        self.DHT11 = dht11
+        self.MQ135 = mq135
+        self.BMP280 = bmp280
     
 class Config:
     def __init__(self):
