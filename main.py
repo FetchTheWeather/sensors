@@ -11,6 +11,9 @@
 # Import core libraries
 import network, time, json, urequests, random, machine
 
+# Import DHT11 library
+import dht
+
 # Global variables
 MODE = "OFFLINE"
 URL = "https://ftw.pietr.dev/"
@@ -32,9 +35,10 @@ class Data:
         self.pressure = None
     
     def collect(self):
+        dht11_data = self.sensors.DHT11()
         self.time = time.time()
-        self.temp = None
-        self.humidity = None
+        self.temp = dht11_data["temp"]
+        self.humidity = dht11_data["humidity"]
         self.quality = None
         self.pressure = None
         
@@ -46,6 +50,9 @@ class Sensors:
         self.DHT11 = DHT11
         self.MQ135 = MQ135
         self.BMP280 = BMP280
+    
+    def DHT11(self):
+        return {"temp": self.DHT11.temperature(), "humidity": self.DHT11.humidity()}
     
 class Config:
     def __init__(self):
@@ -116,7 +123,7 @@ if __name__ == "__main__":
     config.load()
     
     # Sensor initialization goes here
-    
+    DHT11 = dht.DHT11(machine.Pin(0))
     
     sensors = Sensors() # Add sensor objects here
     data = Data(sensors)
