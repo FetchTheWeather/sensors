@@ -166,6 +166,7 @@ if __name__ == "__main__":
     else:
         print("INFO: DHT11 module is disabled")
 
+    # MQ135 module initialization
     if MQ135_ENABLED == True:
         try:
             MQ135_object = MQ135(0)
