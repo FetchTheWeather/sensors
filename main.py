@@ -11,6 +11,9 @@
 # Import core libraries
 import network, time, json, urequests, random, machine
 
+# Import MQ135 library
+from mq135 import *
+
 # Global variables
 MODE = "OFFLINE"
 URL = "https://ftw.pietr.dev/"
@@ -48,11 +51,11 @@ class Sensors:
         self.BMP280 = BMP280
     
     def mq135(self, temp, humidity):
-        rzero = mq135.get_rzero()
-        corrected_rzero = mq135.get_corrected_rzero(temo, humidity)
-        resistance = mq135.get_resistance()
-        ppm = mq135.get_ppm()
-        corrected_ppm = mq135.get_corrected_ppm(temp, humidity)
+        rzero = self.MQ135.get_rzero()
+        corrected_rzero = self.MQ135.get_corrected_rzero(temo, humidity)
+        resistance = self.MQ135.get_resistance()
+        ppm = self.MQ135.get_ppm()
+        corrected_ppm = self.MQ135.get_corrected_ppm(temp, humidity)
         return corrected_ppm
     
 class Config:
