@@ -192,7 +192,7 @@ if __name__ == "__main__":
             except:
                 print("ERROR: Failed to initialize BMP280 module")
         else:
-            print("ERROR: bmp280 module not found!")
+            print("ERROR: BMP280 module not found!")
     else:
         print("INFO: BMP280 module is disabled")
     
