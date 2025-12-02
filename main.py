@@ -11,6 +11,9 @@
 # Import core libraries
 import network, time, json, urequests, random, machine
 
+# Import DHT11 library
+import dht
+
 # Global variables
 MODE = "OFFLINE"
 URL = "https://ftw.pietr.dev/"
@@ -37,9 +40,10 @@ class Data:
         self.pressure = None
     
     def collect(self):
+        dht11_data = self.sensors.DHT11()
         self.time = time.time()
-        self.temp = None
-        self.humidity = None
+        self.temp = dht11_data["temp"]
+        self.humidity = dht11_data["humidity"]
         self.quality = None
         self.pressure = None
         
@@ -51,6 +55,11 @@ class Sensors:
         self.DHT11 = dht11
         self.MQ135 = mq135
         self.BMP280 = bmp280
+    
+    def dht11(self):
+        if self.DHT11 == None:
+            return None
+        return {"temp": self.DHT11.temperature(), "humidity": self.DHT11.humidity()}
     
 class Config:
     def __init__(self):
@@ -126,6 +135,15 @@ if __name__ == "__main__":
     
     # Sensor initialization goes here
     
+    # DHT11 sensor initialization
+    if DHT11_ENABLED == True:
+        try:
+            DHT11_object = dht.DHT11(machine.Pin(4))
+            print("INFO: Initialized DHT11 module")
+        except:
+            print("ERROR: Failed to initialize DHT11 module")
+    else:
+        print("INFO: DHT11 module is disabled")
     
     sensors = Sensors(dht11=DHT11_object, mq135=MQ135_object, bmp280=BMP280_object) # Add sensor objects here
     data = Data(sensors)
