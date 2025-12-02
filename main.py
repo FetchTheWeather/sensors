@@ -131,6 +131,10 @@ if __name__ == "__main__":
     config = Config()
     config.load()
     
+    DHT11_object = None
+    MQ135_object = None
+    BMP280_object = None
+    
     # Sensor initialization goes here
     try:
         mq135 = MQ135(0)
@@ -138,7 +142,7 @@ if __name__ == "__main__":
     except:
         print("ERROR: Failed to initialize MQ135 sensor")
     
-    sensors = Sensors() # Add sensor objects here
+    sensors = Sensors(dht11=DHT11_object, mq135=MQ135_object, bmp280=BMP280_object) # Add sensor objects here
     data = Data(sensors)
     connect(config.config)
     print("INFO: Initialized system")
