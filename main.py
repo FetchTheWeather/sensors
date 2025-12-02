@@ -56,6 +56,8 @@ class Sensors:
         self.BMP280 = bmp280
     
     def mq135(self, temp, humidity):
+        if self.MQ135 == None:
+            return None
         rzero = self.MQ135.get_rzero()
         corrected_rzero = self.MQ135.get_corrected_rzero(temo, humidity)
         resistance = self.MQ135.get_resistance()
@@ -137,7 +139,7 @@ if __name__ == "__main__":
     
     # Sensor initialization goes here
     try:
-        mq135 = MQ135(0)
+        MQ135_object = MQ135(0)
         print("INFO: Initialized MQ135 sensor")
     except:
         print("ERROR: Failed to initialize MQ135 sensor")
