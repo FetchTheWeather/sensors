@@ -40,7 +40,7 @@ class Data:
         self.pressure = None
     
     def collect(self):
-        dht11_data = self.sensors.DHT11()
+        dht11_data = self.sensors.dht11()
         self.time = time.time()
         self.temp = dht11_data["temp"]
         self.humidity = dht11_data["humidity"]
