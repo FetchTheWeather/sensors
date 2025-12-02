@@ -35,7 +35,7 @@ class Data:
         self.time = time.time()
         self.temp = None
         self.humidity = None
-        self.quality = None
+        self.quality = sensors.mq135(self.temp, self.humidity)
         self.pressure = None
         
     def get_dict(self):
@@ -46,6 +46,14 @@ class Sensors:
         self.DHT11 = DHT11
         self.MQ135 = MQ135
         self.BMP280 = BMP280
+    
+    def mq135(self, temp, humidity):
+        rzero = mq135.get_rzero()
+        corrected_rzero = mq135.get_corrected_rzero(temo, humidity)
+        resistance = mq135.get_resistance()
+        ppm = mq135.get_ppm()
+        corrected_ppm = mq135.get_corrected_ppm(temp, humidity)
+        return corrected_ppm
     
 class Config:
     def __init__(self):
@@ -116,7 +124,7 @@ if __name__ == "__main__":
     config.load()
     
     # Sensor initialization goes here
-    
+    mq135 = MQ135(0)
     
     sensors = Sensors() # Add sensor objects here
     data = Data(sensors)
