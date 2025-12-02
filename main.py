@@ -123,7 +123,7 @@ if __name__ == "__main__":
     config.load()
     
     # Sensor initialization goes here
-    dht11 = dht.DHT11(machine.Pin(0))
+    dht11 = dht.DHT11(machine.Pin(4))
     
     sensors = Sensors() # Add sensor objects here
     data = Data(sensors)
