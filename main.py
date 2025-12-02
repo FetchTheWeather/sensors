@@ -138,11 +138,14 @@ if __name__ == "__main__":
     BMP280_object = None
     
     # Sensor initialization goes here
-    try:
-        MQ135_object = MQ135(0)
-        print("INFO: Initialized MQ135 sensor")
-    except:
-        print("ERROR: Failed to initialize MQ135 sensor")
+    if MQ135_ENABLED == True:
+        try:
+            MQ135_object = MQ135(0)
+            print("INFO: Initialized MQ135 module")
+        except:
+            print("ERROR: Failed to initialize MQ135 module")
+    else:
+        print("INFO: MQ135 module is disabled")
     
     sensors = Sensors(dht11=DHT11_object, mq135=MQ135_object, bmp280=BMP280_object) # Add sensor objects here
     data = Data(sensors)
