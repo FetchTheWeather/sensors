@@ -160,9 +160,11 @@ if __name__ == "__main__":
     if MQ135_ENABLED == True:
         try:
             MQ135_object = MQ135(0)
+            MQ135_object.get_rzero() # 'Read from module' check
             print("INFO: Initialized MQ135 module")
         except:
             print("ERROR: Failed to initialize MQ135 module")
+            MQ135_object = None
     else:
         print("INFO: MQ135 module is disabled")
     
