@@ -58,7 +58,7 @@ class Sensors:
     
     def dht11(self):
         if self.DHT11 == None:
-            return None
+            return {"temp": None, "humidity": None}
         return {"temp": self.DHT11.temperature(), "humidity": self.DHT11.humidity()}
     
 class Config:
