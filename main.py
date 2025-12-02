@@ -23,12 +23,13 @@ Copyright (c) 2025 Fetch The Weather
 
 # Define classes
 class Data:
-    def __init__(self, time=time.time(), temp=None, humidity=None, quality=None, pressure=None):
-        self.time = time
-        self.temp = temp
-        self.humidity = humidity
-        self.quality = quality
-        self.pressure = pressure
+    def __init__(self, sensors):
+        self.sensors = sensors
+        self.time = None
+        self.temp = None
+        self.humidity = None
+        self.quality = None
+        self.pressure = None
     
     def collect(self):
         self.time = time.time()
@@ -39,6 +40,12 @@ class Data:
         
     def get_dict(self):
         return {"time": self.time,"temp": self.temp, "humidity": self.humidity, "quality": self.quality, "pressure": self.pressure}
+
+class Sensors:
+    def __init__(self, DHT11, MQ135, BMP280):
+        self.DHT11 = DHT11
+        self.MQ135 = MQ135
+        self.BMP280 = BMP280
     
 class Config:
     def __init__(self):
@@ -107,7 +114,12 @@ if __name__ == "__main__":
     print("INFO: Initializing system...")
     config = Config()
     config.load()
-    data = Data()
+    
+    # Sensor initialization goes here
+    
+    
+    sensors = Sensors() # Add sensor objects here
+    data = Data(sensors)
     connect(config.config)
     print("INFO: Initialized system")
     print("INFO: Running main loop")
