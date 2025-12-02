@@ -51,7 +51,7 @@ class Sensors:
         self.MQ135 = MQ135
         self.BMP280 = BMP280
     
-    def DHT11(self):
+    def dht11(self):
         return {"temp": self.DHT11.temperature(), "humidity": self.DHT11.humidity()}
     
 class Config:
@@ -123,7 +123,7 @@ if __name__ == "__main__":
     config.load()
     
     # Sensor initialization goes here
-    DHT11 = dht.DHT11(machine.Pin(0))
+    dht11 = dht.DHT11(machine.Pin(0))
     
     sensors = Sensors() # Add sensor objects here
     data = Data(sensors)
