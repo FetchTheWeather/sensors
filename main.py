@@ -57,6 +57,8 @@ class Sensors:
         self.BMP280 = bmp280
     
     def dht11(self):
+        if self.DHT11 == None:
+            return None
         return {"temp": self.DHT11.temperature(), "humidity": self.DHT11.humidity()}
     
 class Config:
@@ -135,7 +137,7 @@ if __name__ == "__main__":
     
     # DHT11 sensor initialization
     try:
-        dht11 = dht.DHT11(machine.Pin(4))
+        DHT11_object = dht.DHT11(machine.Pin(4))
         print("INFO: Initialized DHT11 module")
     except:
         print("ERROR: Failed to initialize DHT11 module")
