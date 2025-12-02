@@ -56,6 +56,8 @@ class Sensors:
         self.BMP280 = bmp280
     
     def bmp280(self):
+        if self.BMP280 == None:
+            return None
         return self.BMP280.pressure
     
 class Config:
@@ -137,11 +139,15 @@ if __name__ == "__main__":
     addr = 0x76
     if addr in bus.scan():
         print("INFO: bmp280 module found at I2C address " + hex(addr))
-        bmp = BMP280(bus)
+        try:
+            BMP280_object = BMP280(bus)
 
-        bmp.use_case(BMP280_CASE_WEATHER)
-        bmp.oversample(BMP280_OS_HIGH)
-        bmp.normal_measure()
+            BMP280_object.use_case(BMP280_CASE_WEATHER)
+            BMP280_object.oversample(BMP280_OS_HIGH)
+            BMP280_object.normal_measure()
+            print("INFO: Initialized BMP280 module")
+        except:
+            print("ERROR: Failed to initialize BMP280 module")
     else:
         print("ERROR: bmp280 module not found!")
     
