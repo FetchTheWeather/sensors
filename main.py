@@ -14,6 +14,9 @@ import network, time, json, urequests, random, machine
 # Import DHT11 library
 import dht
 
+# Import MQ135 library
+from mq135 import *
+
 # Global variables
 MODE = "OFFLINE"
 URL = "https://ftw.pietr.dev/"
@@ -44,7 +47,7 @@ class Data:
         self.time = time.time()
         self.temp = dht11_data["temp"]
         self.humidity = dht11_data["humidity"]
-        self.quality = None
+        self.quality = sensors.mq135(self.temp, self.humidity)
         self.pressure = None
         
     def get_dict(self):
@@ -55,11 +58,21 @@ class Sensors:
         self.DHT11 = dht11
         self.MQ135 = mq135
         self.BMP280 = bmp280
-    
+
     def dht11(self):
         if self.DHT11 == None:
             return None
         return {"temp": self.DHT11.temperature(), "humidity": self.DHT11.humidity()}
+
+    def mq135(self, temp, humidity):
+        if self.MQ135 == None:
+            return None
+        rzero = self.MQ135.get_rzero()
+        corrected_rzero = self.MQ135.get_corrected_rzero(temo, humidity)
+        resistance = self.MQ135.get_resistance()
+        ppm = self.MQ135.get_ppm()
+        corrected_ppm = self.MQ135.get_corrected_ppm(temp, humidity)
+        return corrected_ppm
     
 class Config:
     def __init__(self):
@@ -144,6 +157,15 @@ if __name__ == "__main__":
             print("ERROR: Failed to initialize DHT11 module")
     else:
         print("INFO: DHT11 module is disabled")
+
+    if MQ135_ENABLED == True:
+        try:
+            MQ135_object = MQ135(0)
+            print("INFO: Initialized MQ135 module")
+        except:
+            print("ERROR: Failed to initialize MQ135 module")
+    else:
+        print("INFO: MQ135 module is disabled")
     
     sensors = Sensors(dht11=DHT11_object, mq135=MQ135_object, bmp280=BMP280_object) # Add sensor objects here
     data = Data(sensors)
