@@ -127,7 +127,11 @@ if __name__ == "__main__":
     config.load()
     
     # Sensor initialization goes here
-    mq135 = MQ135(0)
+    try:
+        mq135 = MQ135(0)
+        print("INFO: Initialized MQ135 sensor")
+    except:
+        print("ERROR: Failed to initialize MQ135 sensor")
     
     sensors = Sensors() # Add sensor objects here
     data = Data(sensors)
