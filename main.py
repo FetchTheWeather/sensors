@@ -138,6 +138,8 @@ if __name__ == "__main__":
     BMP280_object = None
     
     # Sensor initialization goes here
+    
+    # MQ135 module initialization
     if MQ135_ENABLED == True:
         try:
             MQ135_object = MQ135(0)
