@@ -126,6 +126,10 @@ if __name__ == "__main__":
     config = Config()
     config.load()
     
+    DHT11_object = None
+    MQ135_object = None
+    BMP280_object = None
+    
     # Sensor initialization goes here
     
     # BMP280 sensor initialization
@@ -141,7 +145,7 @@ if __name__ == "__main__":
     else:
         print("ERROR: bmp280 module not found!")
     
-    sensors = Sensors() # Add sensor objects here
+    sensors = Sensors(dht11=DHT11_object, mq135=MQ135_object, bmp280=BMP280_object) # Add sensor objects here
     data = Data(sensors)
     connect(config.config)
     print("INFO: Initialized system")
