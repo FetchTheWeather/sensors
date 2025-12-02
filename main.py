@@ -8,8 +8,8 @@
 # LICENSED UNDER THE MIT LICENSE
 #
 
-# Import libraries
-import network, time, json, urequests, random
+# Import core libraries
+import network, time, json, urequests, random, machine
 
 # Global variables
 MODE = "OFFLINE"
