@@ -17,6 +17,9 @@ import dht
 # Import MQ135 library
 from mq135 import *
 
+# Import BMP280 library
+from bmp280 import *
+
 # Global variables
 MODE = "OFFLINE"
 URL = "https://ftw.pietr.dev/"
@@ -48,8 +51,8 @@ class Data:
         self.temp = dht11_data["temp"]
         self.humidity = dht11_data["humidity"]
         self.quality = sensors.mq135(self.temp, self.humidity)
-        self.pressure = None
-        
+        self.pressure = self.sensors.bmp280()
+
     def get_dict(self):
         return {"time": self.time,"temp": self.temp, "humidity": self.humidity, "quality": self.quality, "pressure": self.pressure}
 
@@ -73,6 +76,11 @@ class Sensors:
         ppm = self.MQ135.get_ppm()
         corrected_ppm = self.MQ135.get_corrected_ppm(temp, humidity)
         return corrected_ppm
+    
+    def bmp280(self):
+        if self.BMP280 == None:
+            return None
+        return self.BMP280.pressure
     
 class Config:
     def __init__(self):
@@ -166,6 +174,26 @@ if __name__ == "__main__":
             print("ERROR: Failed to initialize MQ135 module")
     else:
         print("INFO: MQ135 module is disabled")
+
+    # BMP280 sensor initialization
+    if BMP280_ENABLED == True:
+        bus = machine.I2C(sda=machine.Pin(8), scl=machine.Pin(9))
+        addr = 0x76
+        if addr in bus.scan():
+            print("INFO: bmp280 module found at I2C address " + hex(addr))
+            try:
+                BMP280_object = BMP280(bus)
+
+                BMP280_object.use_case(BMP280_CASE_WEATHER)
+                BMP280_object.oversample(BMP280_OS_HIGH)
+                BMP280_object.normal_measure()
+                print("INFO: Initialized BMP280 module")
+            except:
+                print("ERROR: Failed to initialize BMP280 module")
+        else:
+            print("ERROR: bmp280 module not found!")
+    else:
+        print("INFO: BMP280 module is disabled")
     
     sensors = Sensors(dht11=DHT11_object, mq135=MQ135_object, bmp280=BMP280_object) # Add sensor objects here
     data = Data(sensors)
