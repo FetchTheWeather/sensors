@@ -156,9 +156,11 @@ if __name__ == "__main__":
     if DHT11_ENABLED == True:
         try:
             DHT11_object = dht.DHT11(machine.Pin(4))
+            DHT11_object.temperature()
             print("INFO: Initialized DHT11 module")
         except:
             print("ERROR: Failed to initialize DHT11 module")
+            DHT11_object = None
     else:
         print("INFO: DHT11 module is disabled")
     
