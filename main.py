@@ -22,7 +22,7 @@ from bmp280 import *
 
 # Global variables
 MODE = "OFFLINE"
-URL = "https://ftw.pietr.dev/"
+URL = "https://ftw.pietr.dev/ws/weather/data"
 CONFIG_FILE = "/config.json"
 sta_if = network.WLAN(network.WLAN.IF_STA)
 START_MSG = """
@@ -37,8 +37,9 @@ BMP280_ENABLED = True
 
 # Define classes
 class Data:
-    def __init__(self, sensors):
+    def __init__(self, sensors, config):
         self.sensors = sensors
+        self.config = config
         self.time = None
         self.temp = None
         self.humidity = None
@@ -54,7 +55,23 @@ class Data:
         self.pressure = self.sensors.bmp280()
 
     def get_dict(self):
-        return {"time": self.time,"temp": self.temp, "humidity": self.humidity, "quality": self.quality, "pressure": self.pressure}
+        if self.temp == None:
+            temp = 0
+        else:
+            temp = self.temp
+        if self.humidity == None:
+            humidity = 0
+        else:
+            humidity = self.humidity
+        if self.quality == None:
+            quality = 0
+        else:
+            quality = self.quality
+        if self.pressure == None:
+            pressure = 0
+        else:
+            pressure = self.pressure
+        return {"weatherStationId": str(self.config.config["id"]), "temperatureCelsius": temp, "airPressureHpa": pressure, "airQualityPpm": quality, "humidityPercent": humidity, "timestamp": str(self.time)}
 
 class Sensors:
     def __init__(self, dht11, mq135, bmp280):
@@ -197,7 +214,7 @@ if __name__ == "__main__":
         print("INFO: BMP280 module is disabled")
     
     sensors = Sensors(dht11=DHT11_object, mq135=MQ135_object, bmp280=BMP280_object) # Add sensor objects here
-    data = Data(sensors)
+    data = Data(sensors, config)
     connect(config.config)
     print("INFO: Initialized system")
     print("INFO: Running main loop")
