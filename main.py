@@ -76,6 +76,7 @@ class Sensors:
     def dht11(self):
         if self.DHT11 == None:
             return {"temp": None, "humidity": None}
+        self.DHT11.measure()
         return {"temp": self.DHT11.temperature(), "humidity": self.DHT11.humidity()}
     
 class Config:
@@ -156,7 +157,7 @@ if __name__ == "__main__":
     if DHT11_ENABLED == True:
         try:
             DHT11_object = dht.DHT11(machine.Pin(4))
-            DHT11_object.temperature()
+            DHT11_object.measure()
             print("INFO: Initialized DHT11 module")
         except:
             print("ERROR: Failed to initialize DHT11 module")
