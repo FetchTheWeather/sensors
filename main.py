@@ -12,7 +12,7 @@
 import network, time, json, urequests, random, machine
 
 # Import MQ135 library
-from mq135 import *
+from mq135 import MQ135
 
 # Global variables
 MODE = "OFFLINE"
@@ -76,7 +76,7 @@ class Sensors:
         if self.MQ135 == None:
             return None
         rzero = self.MQ135.get_rzero()
-        corrected_rzero = self.MQ135.get_corrected_rzero(temo, humidity)
+        corrected_rzero = self.MQ135.get_corrected_rzero(temp, humidity)
         resistance = self.MQ135.get_resistance()
         ppm = self.MQ135.get_ppm()
         corrected_ppm = self.MQ135.get_corrected_ppm(temp, humidity)
@@ -159,9 +159,12 @@ if __name__ == "__main__":
     # MQ135 module initialization
     if MQ135_ENABLED == True:
         try:
-            MQ135_object = MQ135(0)
+            MQ135_object = MQ135(machine.Pin(26))
             MQ135_object.get_rzero() # 'Read from module' check
             print("INFO: Initialized MQ135 module")
+            if DHT11_object == None:
+                print("ERROR: Dependancy check failed for module MQ135: DHT11 module is not initialized")
+                MQ135_object = None
         except:
             print("ERROR: Failed to initialize MQ135 module")
             MQ135_object = None
