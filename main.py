@@ -71,7 +71,7 @@ class Data:
             pressure = 0
         else:
             pressure = self.pressure
-        return {"weatherStationId": str(self.config.config["id"]), "temperatureCelsius": temp, "airPressureHpa": pressure, "airQualityPpm": quality, "humidityPercent": humidity, "timestamp": str(self.time)}
+        return {"weatherStationId": str(self.config.config["id"]), "temperatureCelsius": temp, "airPressureHpa": pressure, "airQualityPpm": quality, "humidityPercent": humidity, "timestamp": self.time}
 
 class Sensors:
     def __init__(self, dht11, mq135, bmp280):
