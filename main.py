@@ -98,6 +98,7 @@ class Sensors:
     def bmp280(self):
         if self.BMP280 == None:
             return None
+        self.BMP280.normal_measure()
         return self.BMP280.pressure
     
 class Config:
