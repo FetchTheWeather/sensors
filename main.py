@@ -98,6 +98,7 @@ class Sensors:
     def bmp280(self):
         if self.BMP280 == None:
             return None
+        self.BMP280.normal_measure()
         return self.BMP280.pressure
     
 class Config:
@@ -178,7 +179,8 @@ if __name__ == "__main__":
     if DHT11_ENABLED == True:
         try:
             DHT11_object = dht.DHT11(machine.Pin(4))
-            DHT11_object.measure()
+            try: DHT11_object.measure() # First time always fails to pull data due to a checksum error
+            except: DHT11_object.measure() # Second time should work if the sensor is available
             print("INFO: Initialized DHT11 module")
         except:
             print("ERROR: Failed to initialize DHT11 module")
